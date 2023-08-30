@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "hoptex"
+version = "0.1.0"
+description = "Hoptex is Textual plugin that allows you to focus widgets fast!"
+authors = ["Cvaniak <igna.cwaniak@gmail.com>"]
+repository = "https://github.com/Cvaniak/Hoptex"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+textual = "^0.21.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+isort = "^5.12.0"
+pre-commit = "^3.3.3"
+flakeheaven = "^3.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 120
+
+[tool.flakeheaven]
+max-line-length = 120
