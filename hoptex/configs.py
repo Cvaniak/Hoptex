@@ -43,7 +43,7 @@ class HoptexWidgetsFiltersConfig:
 class HopLabel(Static):
     DEFAULT_CSS = """
     HopLabel {
-        width: 1;
+        width: auto;
         height: 1;
         color: yellow;
         text-style: bold;

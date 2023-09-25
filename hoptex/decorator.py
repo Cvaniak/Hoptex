@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+from typing import Any, Optional
 
 from textual.app import App
 from textual.widget import Widget
@@ -21,7 +22,9 @@ async def _action_hoptex_screen_choose(self: App, focus_and_press: bool = False)
 
     screen = HopScreen(bindings, filter_lists, label)
 
-    screen.set_parent_screen(self.screen)
+    parent_widgets = getattr(self, "_hoptex_parent_widgets", set()) or {self.screen}
+
+    screen.set_parent_screen(parent_widgets)
 
     async def _perform_action(widget: Widget):
         for function, attrs, kwargs in [("_on_click", [DUMMY_MOUSE_EVENT], {}), ("on_click", [], {})]:
@@ -47,14 +50,18 @@ async def _action_hoptex_unfocus(self: App) -> None:
     self.screen.set_focus(None)
 
 
+def set_parent_widgets(self, widgets: list[Widget]):
+    self._hoptex_parent_widgets = widgets
+
+
 def hoptex(
-    cls=None,
+    cls: Optional[type[Any]] = None,
     *,
     bindings: HoptexBindingConfig = HoptexBindingConfig(),
     widgets_filters: HoptexWidgetsFiltersConfig = HoptexWidgetsFiltersConfig(),
     label: type[Static] = HopLabel,
 ):
-    def _hoptex_decorator(cls):
+    def _hoptex_decorator(cls: type[Any]) -> type[Any]:
         original_init = cls.__init__
 
         def hoptex_init(self, *args, **kwargs):
@@ -72,6 +79,8 @@ def hoptex(
         setattr(cls, "_hoptex_filter_lists", widgets_filters)
 
         setattr(cls, "_hoptex_label", label)
+
+        setattr(cls, "set_parent_widgets", set_parent_widgets)
 
         return cls
 

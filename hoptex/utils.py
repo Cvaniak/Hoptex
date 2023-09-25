@@ -11,6 +11,7 @@ DUMMY_MOUSE_EVENT = events.Click(0, 0, 0, 0, 0, False, False, False, False)
 
 def focusable_children(widget: Widget) -> list[Widget]:
     focusable = [child for child in widget._nodes if child.display and child.visible]
+
     return focusable
 
 
@@ -29,7 +30,7 @@ def get_focusable(widget: Widget, filter_lists: HoptexWidgetsFiltersConfig):
             if type(node) in filter_lists.block_list:
                 continue
             if node.is_container and node.can_focus_children:
-                push(iter(node.focusable_children))
+                push(iter(focusable_children(node)))
             if filter_lists.include_focusable and node.focusable:
                 add_widget(node)
             elif type(node) in filter_lists.allow_list:
